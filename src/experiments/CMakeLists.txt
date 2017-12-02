@@ -16,15 +16,18 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED)
 find_package(MRPT REQUIRED)
+find_package(OpenCV REQUIRED)
 
 
 
 include(${CMAKE_SOURCE_DIR}/cmake/StructuresConfig.cmake)
 if(OpenCV_FOUND)
-	MESSAGE(STATUS "OpenCV-Found(${OpenCV_FOUND})")
+	MESSAGE(STATUS "OpenCV-Found(${OpenCV_FOUND})") 
 	set(OpenCV_LIBS opencv_tegra)
 endif(OpenCV_FOUND)
 
+
+include(${CMAKE_SOURCE_DIR}/cmake/RelativePoseEstimationConfig.cmake)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -113,7 +116,13 @@ endif(OpenCV_FOUND)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES DataStructures boost_filesystem boost_system ${MRPT_LIBS}
+  LIBRARIES
+DataStructures
+boost_filesystem
+boost_system
+${MRPT_LIBS}
+${RelativePoseEstimation_LIBS}
+${OpenCV_LIBS}
 #  CATKIN_DEPENDS common_msgs roscpp rospy std_msgs tf tf2
 #  DEPENDS system_lib
 )
@@ -126,9 +135,17 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 	${MRPT_INCLUDE_DIRS}
+	${RelativePoseEstimation_INCLUDE_DIRS}
+	${Structures_INCLUDE_DIRS}
+	${OpenCV_INCLUDE_DIRS}
+)
+
+link_directories(
+	${RelativePoseEstimation_LIBRARIES_DIR}
+	${Structures_LIBRARIES_DIR}
 )
 
 ## Declare a C++ library
@@ -141,6 +158,9 @@ include_directories(
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+
+MESSAGE(STATUS "Opencv includes  ${OpenCV_INCLUDE_DIRS}")
+MESSAGE(STATUS "cuda static - ${CUDA_USE_STATIC_CUDA_RUNTIME}")
 
 ##create Tests
 
@@ -156,6 +176,8 @@ foreach(file ${files})
 		${catkin_LIBRARIES}
 		${OpenCV_LIBS}
 		${MRPT_LIBS}
+		${RelativePoseEstimation_LIBS}
+		${Stuctures_LIBS}
 	)
 endforeach()
 # add_executable(${PROJECT_NAME}_node src/experiments_node.cpp)
