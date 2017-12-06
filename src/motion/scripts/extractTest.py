@@ -138,10 +138,6 @@ req=essentialEstimationRequest()
 req.current=currentFrame
 req.previous=prevFrame
 
-for index in range(0,4):
-	print(req.current.left.landmarks[index])
-	print(req.previous.left.landmarks[index])
-
 answer=serv(req)
 print(answer)
 
