@@ -1,7 +1,0 @@
-vSLAM_utils/stereoFrame current
-vSLAM_utils/stereoFrame previous
----
-vSLAM_utils/RMatrix R
-geometry_msgs/Point T
-bool[] mask
-
